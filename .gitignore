@@ -435,3 +435,6 @@ TSWLatexianTemp*
 
 # DS_Store
 *.DS_Store
+
+#output (plots and such)
+output/
