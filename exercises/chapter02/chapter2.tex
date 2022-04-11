@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage{amsmath}
 \begin{document}
 \setcounter{section}{1}
 \section{Multi-Armed Bandits}
@@ -22,5 +23,27 @@
 \item In the long run, both algorithms will be (nearly) certain about what the best reward is. The $\varepsilon = 0.1$ agent will select the optimal action in $1 - \varepsilon = 90\%$ of cases. The $\varepsilon = 0.01$ agent will select the optimal action in $1 - \varepsilon = 99\%$ of cases. 
 \item By both metrics, the lower $\varepsilon$ is superior in the long run. However, it takes much longer to converge.
 \end{itemize}
+
+\subsection{}
+\textit{If the step-size parameters, $\alpha_n$, are not constant, then the estimate $Q_n$ is a weighted average of previously received rewards with a weighting different from that given by (2.6). What is the weighting on each prior reward for the general case, analogous to (2.6), in terms of the sequence of step-size parameters?}
+\begin{itemize}
+\item This is fundamentally the same as in (2.6), only the notation comes out less cleanly because we cannot aggregate the different step size parameters into one neat exponent.
+\end{itemize}
+\begin{align}
+Q_{n+1} =&\, Q_n + \alpha_n [R_n + Q_n] \\
+= &\, \alpha_n R_n + (1-\alpha_n) Q_n \\
+=&\, \alpha_n  R_n + (1-\alpha_n)[\alpha_{n-1} R_{n-1} + (1-\alpha_{n-1} Q_{n-1}] \\
+= &\, \alpha_n R_n + (1-\alpha_n) \alpha_{n-1} R_{n-1} + (1-\alpha_n)(1-\alpha_{n-1}) Q_{n-1} \\
+= &\, \alpha_n R_n + (1-\alpha_n) \alpha_{n-1} R_{n-1} + (1-\alpha_n)(1-\alpha_{n-1})\\
+ &\, + ... + (1-\alpha_2) \alpha_1 R_1\\
+= &\, \sum_{i=1}^{n} \left[\alpha_i \cdot \left(\prod_{k=i+1}^{n} (1-\alpha_k)\right) R_i\right]
+\end{align}
+
+\subsection{programming}
+\textit{Design and conduct an experiment to demonstrate the difficulties that sample-average methods have for nostationary problems. Use a modified version of the 10-armed testbed in which all the $q_* (a)$ start out equal and then take independent random walks (say by adding a normally distributed increment wiht mean zero and standard deviation 0.01 to all the $q_* (a)$ on each step). Prepare plots like Figure 2.2 for an action-value method using sample averages, incrementally computed, and another action-value method using a constant step-size parameter, $\alpha = 0.1$. Use $\varepsilon = 0.1$ and longer runs, say of 10.000 steps. }
+\begin{itemize}
+\item Answer
+\end{itemize}
+
 
 \end{document}
