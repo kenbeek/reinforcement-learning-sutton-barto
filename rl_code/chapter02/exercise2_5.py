@@ -2,9 +2,12 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import sys
 
 # local imports
 from rl_code.constants import output_dir
+from rl_code.bandit import Bandit
+from rl_code.agent import Agent
 
 """
 Design and conduct an experiment to demonstrate the difficulties that sample-average 
@@ -19,8 +22,8 @@ longer runs, say of 10.000 steps.
 
 
 # parameters
-STEPS = 20000
-AVERAGE_OVER = 2000
+STEPS = 2000
+AVERAGE_OVER = 200
 REWARD_VARIANCE = 1
 RANDOM_WALK_STANDARD_DEVIATION = 0.01
 ALPHA = 0.1
@@ -32,96 +35,36 @@ result_array_dynamic = np.zeros(STEPS)
 
 for k in tqdm(range(AVERAGE_OVER)):
 
-    # initialize reward means to zero
-    reward_means = np.ones(NUMBER_OF_BANDITS)
-    # initialize estimates Q(a) to zero
-    sample_averages_stationary = np.zeros(NUMBER_OF_BANDITS)
-    sample_averages_dynamic = np.zeros(
-        NUMBER_OF_BANDITS
-    )  # this isn't actually a sample average anymore
-    # initialize action counts N(a) to zero
-    action_counts_stationary = np.zeros(NUMBER_OF_BANDITS, dtype=int)
-    action_counts_dynamic = np.zeros(NUMBER_OF_BANDITS, dtype=int)
-    # store all rewards (for plotting)
-    rewards_stationary = []
-    rewards_dynamic = []
+    bandit = Bandit(number_of_bandits=10, drift=0.01)
+    stationary_agent = Agent(number_of_bandits=10, estimator="sample_average")
+    decay_agent = Agent(number_of_bandits=10, estimator="weighted_exponential")
+    # track rewards for plotting
+    rewards_stationary, rewards_decay = [], []
 
     for i in tqdm(range(STEPS), leave=False):
 
-        # determine if this is a greedy step or an epsilon step
-        pick_at_random = np.random.default_rng().uniform(0, 1) > 1 - EPSILON
-        # pick an action (either greedy or random)
+        stationary_action = stationary_agent.pick_action()
+        stationary_reward = bandit.provide_reward(stationary_action)
+        stationary_agent.update_estimate(stationary_action, stationary_reward)
 
-        # STATIONARY
-        # epsilon case
-        if pick_at_random:
-            action_stationary = np.random.randint(NUMBER_OF_BANDITS)
-        # greedy case
-        else:
-            # check if there is a unique maximum in the sample averages
-            # if so, simply use that maximum
-            # if not, select randomly from the joint maxima
-            if sum(sample_averages_stationary == max(sample_averages_stationary)) == 1:
-                action_stationary = np.argmax(sample_averages_stationary)
-            else:
-                possible_actions = np.where(
-                    sample_averages_stationary == max(sample_averages_stationary)
-                )[0]
-                action_stationary = np.random.choice(possible_actions)
+        decay_action = decay_agent.pick_action()
+        decay_reward = bandit.provide_reward(decay_action)
+        decay_agent.update_estimate(decay_action, decay_reward)
 
-        # get the reward for the chosen action
-        action_mean_stationary = reward_means[action_stationary]
-        reward_stationary = np.random.default_rng().normal(
-            action_mean_stationary, REWARD_VARIANCE
-        )
-        # update sample average and action count
-        action_counts_stationary[action_stationary] += 1
-        sample_averages_stationary[action_stationary] = sample_averages_stationary[
-            action_stationary
-        ] + (1 / action_counts_stationary[action_stationary]) * (
-            reward_stationary - sample_averages_stationary[action_stationary]
-        )
-
-        # DYNAMIC
-        # epsilon case
-        if pick_at_random:
-            action_dynamic = np.random.randint(NUMBER_OF_BANDITS)
-
-        # greedy case
-        else:
-            if sum(sample_averages_dynamic == max(sample_averages_dynamic)) == 1:
-                action_dynamic = np.argmax(sample_averages_dynamic)
-            else:
-                possible_actions = np.where(
-                    sample_averages_dynamic == max(sample_averages_dynamic)
-                )[0]
-                action_dynamic = np.random.choice(possible_actions)
-
-        # get the reward for the chose action
-        action_mean_dynamic = reward_means[action_dynamic]
-        reward_dynamic = np.random.default_rng().normal(
-            action_mean_dynamic, REWARD_VARIANCE
-        )
-        # update the estimate and the action count
-        action_counts_dynamic[action_dynamic] += 1
-        sample_averages_dynamic[action_dynamic] = sample_averages_dynamic[
-            action_dynamic
-        ] + ALPHA * (reward_dynamic - sample_averages_dynamic[action_dynamic])
-
+        bandit.perform_drift()
         # update reward means with random walk
-        reward_means += np.random.default_rng().normal(
-            loc=0, scale=RANDOM_WALK_STANDARD_DEVIATION, size=NUMBER_OF_BANDITS
-        )
-        rewards_stationary.append(reward_stationary)
-        rewards_dynamic.append(reward_dynamic)
+
+        rewards_stationary.append(stationary_reward)
+        rewards_decay.append(decay_reward)
 
     # compute the average over the rewards
     result_array_stationary = result_array_stationary + (1 / (k + 1)) * (
         rewards_stationary - result_array_stationary
     )
     result_array_dynamic = result_array_dynamic + (1 / (k + 1)) * (
-        rewards_dynamic - result_array_dynamic
+        rewards_decay - result_array_dynamic
     )
+
 fig, ax = plt.subplots(figsize=(10, 7))
 sns.lineplot(x=[i for i in range(STEPS)], y=result_array_stationary)
 sns.lineplot(x=[i for i in range(STEPS)], y=result_array_dynamic)
@@ -130,7 +73,7 @@ plt.title(
     f"Comparison of sample average vs Exponential decay method, {STEPS} steps, averaged over {AVERAGE_OVER} runs"
 )
 
-save_file = output_dir.joinpath(f"exp_vs_samp_{STEPS}_{AVERAGE_OVER}.png")
+# save_file = output_dir.joinpath(f"exp_vs_samp_{STEPS}_{AVERAGE_OVER}.png")
 fig.savefig(save_file)
 plt.show()
 
