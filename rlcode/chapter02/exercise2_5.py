@@ -5,9 +5,9 @@ from tqdm import tqdm
 import sys
 
 # local imports
-from rl_code.constants import output_dir
-from rl_code.bandit import Bandit
-from rl_code.agent import Agent
+from rlcode.constants import output_dir
+from rlcode.bandit import Bandit
+from rlcode.agent import Agent
 
 """
 Design and conduct an experiment to demonstrate the difficulties that sample-average 
@@ -74,7 +74,7 @@ plt.title(
 )
 
 # save_file = output_dir.joinpath(f"exp_vs_samp_{STEPS}_{AVERAGE_OVER}.png")
-fig.savefig(save_file)
+# fig.savefig(save_file)
 plt.show()
 
 # (ggplot(rewards) + aes(x=[i for i in range(len(rewards))], y=rewards) + geom_line())

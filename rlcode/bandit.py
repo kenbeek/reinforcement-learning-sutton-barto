@@ -13,7 +13,7 @@ class Bandit:
             else:
                 self.reward_means = np.array(initial_state)
         else:
-            self.reward_means = np.zeros()
+            self.reward_means = np.zeros(number_of_bandits)
         self.number_of_bandits = number_of_bandits
         self.stddev = stddev
         self.drift = drift

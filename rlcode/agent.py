@@ -15,7 +15,7 @@ class Agent:
         self.number_of_bandits = number_of_bandits
         self.estimator = estimator
         self.epsilon = epsilon
-        self.action_counts = np.zeros(number_of_bandits, type=int)
+        self.action_counts = np.zeros(number_of_bandits, dtype=int)
         self.pick_at_random = False
         self.alpha = alpha
 
@@ -65,5 +65,5 @@ class Agent:
             # update exponentially decaying weighted average
             self.estimates[action] += self.alpha * (reward - self.estimates[action])
         # in both cases, update action count for action
-        # since these should always be performed together, I put them in the same method
+        # since these should always be performed together, I put them in the same
         self.action_counts[action] += 1
