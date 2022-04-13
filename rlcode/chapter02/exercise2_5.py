@@ -22,8 +22,8 @@ longer runs, say of 10.000 steps.
 
 
 # parameters
-STEPS = 2000
-AVERAGE_OVER = 200
+STEPS = 10000
+AVERAGE_OVER = 2000
 REWARD_VARIANCE = 1
 RANDOM_WALK_STANDARD_DEVIATION = 0.01
 ALPHA = 0.1
@@ -73,8 +73,8 @@ plt.title(
     f"Comparison of sample average vs Exponential decay method, {STEPS} steps, averaged over {AVERAGE_OVER} runs"
 )
 
-# save_file = output_dir.joinpath(f"exp_vs_samp_{STEPS}_{AVERAGE_OVER}.png")
-# fig.savefig(save_file)
+save_file = output_dir.joinpath(f"exp_vs_samp_{STEPS}_{AVERAGE_OVER}.png")
+fig.savefig(save_file)
 plt.show()
 
 # (ggplot(rewards) + aes(x=[i for i in range(len(rewards))], y=rewards) + geom_line())

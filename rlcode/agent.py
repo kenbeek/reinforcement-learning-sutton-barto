@@ -39,7 +39,7 @@ class Agent:
                 action = np.argmax(self.estimates)
             else:
                 # if there are multiple best choices, pick one of those at random
-                possible_actions = np.where(self.estimates == max(self.estimates))
+                possible_actions = np.where(self.estimates == max(self.estimates))[0]
                 action = np.random.choice(possible_actions)
 
         return action
@@ -55,6 +55,10 @@ class Agent:
             action (int): action number
             reward (float): reward from bandit
         """
+        # in both cases, update action count for action
+        # since these should always be performed together, I put them in the same
+        self.action_counts[action] += 1
+
         # check type of estimator
         if self.estimator == "sample_average":
             # update sample average
@@ -64,6 +68,4 @@ class Agent:
         if self.estimator == "weighted_exponential":
             # update exponentially decaying weighted average
             self.estimates[action] += self.alpha * (reward - self.estimates[action])
-        # in both cases, update action count for action
-        # since these should always be performed together, I put them in the same
-        self.action_counts[action] += 1
+        

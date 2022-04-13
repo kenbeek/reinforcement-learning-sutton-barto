@@ -438,3 +438,6 @@ TSWLatexianTemp*
 
 #output (plots and such)
 output/
+
+# vscode
+launch.json
