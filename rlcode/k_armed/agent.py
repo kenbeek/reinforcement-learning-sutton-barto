@@ -1,5 +1,6 @@
 import numpy as np
 from rlcode.utils import pick_softmax_action
+from types import NoneType
 
 
 class Agent:
@@ -14,7 +15,11 @@ class Agent:
         number_of_bandits=10,
         alpha=0.1,
     ):
-        self.estimates = estimates or np.zeros(number_of_bandits)
+        if type(estimates) == NoneType:
+            self.estimates = np.zeros(number_of_bandits)
+        else:
+            self.estimates = estimates
+        # self.estimates = estimates or np.zeros(number_of_bandits)
         self.number_of_bandits = number_of_bandits
         self.action_counts = np.zeros(number_of_bandits, dtype=int)
         self.pick_at_random = False
