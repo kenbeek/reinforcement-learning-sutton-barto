@@ -6,8 +6,8 @@ import sys
 
 # local imports
 from rlcode.constants import output_dir
-from rlcode.bandit import Bandit
-from rlcode.agent import Agent
+from rlcode.k_armed.bandit import Bandit
+from rlcode.k_armed.agent import EpsilonGreedyAgent, MovingAverageAgent
 
 """
 Design and conduct an experiment to demonstrate the difficulties that sample-average 
@@ -36,8 +36,8 @@ result_array_dynamic = np.zeros(STEPS)
 for k in tqdm(range(AVERAGE_OVER)):
 
     bandit = Bandit(number_of_bandits=10, drift=0.01)
-    stationary_agent = Agent(number_of_bandits=10, estimator="sample_average")
-    decay_agent = Agent(number_of_bandits=10, estimator="weighted_exponential")
+    stationary_agent = EpsilonGreedyAgent(number_of_bandits=10, epsilon=0.1)
+    decay_agent = MovingAverageAgent(number_of_bandits=10, epsilon=0.1, alpha=0.1)
     # track rewards for plotting
     rewards_stationary, rewards_decay = [], []
 
