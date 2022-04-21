@@ -1,4 +1,5 @@
 import numpy as np
+from rlcode.utils import pick_softmax_action
 
 
 class Agent:
@@ -48,9 +49,9 @@ class Agent:
         # the same method
         self.action_counts[action] += 1
         # update sample average
-        self.estimates[action] += (
-            1 / self.action_counts[action]
-        ) * reward - self.estimates[action]
+        self.estimates[action] += (1 / self.action_counts[action]) * (
+            reward - self.estimates[action]
+        )
 
 
 class EpsilonGreedyAgent(Agent):
@@ -146,8 +147,12 @@ class GradientAgent(Agent):
                     reward - self.estimates[action]
                 ) * (1 - pi[a])
             else:
-                self.preferences[action] = self.preferences[action] - self.step_size * (
-                    reward - self.estimates[action]
-                ) * pi[a]
+                self.preferences[action] = (
+                    self.preferences[action]
+                    - self.step_size * (reward - self.estimates[action]) * pi[a]
+                )
 
-    def pick_action(self)
+    def pick_action(self):
+        # pick an action according to the softmax probabiliteis
+        action = pick_softmax_action(self.preferences)
+        return action
