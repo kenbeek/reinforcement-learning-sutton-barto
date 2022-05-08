@@ -135,7 +135,7 @@ class GradientAgent(Agent):
         preferences=None,
         step_size=0.1,
     ):
-        super().__init__(estimates, number_of_bandits, alpha)
+        super().__init__(number_of_bandits=number_of_bandits, alpha=alpha)
         if preferences is not None:
             assert len(preferences) == number_of_bandits
             self.preferences = preferences
@@ -156,6 +156,13 @@ class GradientAgent(Agent):
                     self.preferences[action]
                     - self.step_size * (reward - self.estimates[action]) * pi[a]
                 )
+
+    def update_estimate(self, action, reward):
+        self.action_counts[action] += 1
+        # update sample average
+        self.estimates[action] += (1 / self.action_counts[action]) * (
+            reward - self.estimates[action]
+        )
 
     def pick_action(self):
         # pick an action according to the softmax probabiliteis

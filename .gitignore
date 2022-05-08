@@ -439,5 +439,10 @@ TSWLatexianTemp*
 #output (plots and such)
 output/
 
+# results (intermediate dataframes)
+results/
+
+#debugging code
+debug.py
 # vscode
 launch.json
