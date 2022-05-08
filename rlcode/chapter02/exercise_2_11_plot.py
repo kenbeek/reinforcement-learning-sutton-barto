@@ -1,10 +1,10 @@
-from rlcode.constants import project_dir
+import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
+from rlcode.constants import output_dir, project_dir
 
 RUNS = 10
-STEPS = 20000
+STEPS = 200000
 
 result_frame_save_path = project_dir.joinpath("results").joinpath(
     f"q2_11_result_{RUNS}_{STEPS}.csv"
@@ -15,6 +15,15 @@ result_frame = (
 )
 print(result_frame)
 
-plot = sns.lineplot(data=result_frame, x="parameter_value", y="reward", hue="parameter")
-plot.set(xscale="log")
+fig, ax = plt.subplots(figsize=(10, 7))
+sns.lineplot(data=result_frame, x="parameter_value", y="reward", hue="parameter")
+plt.xscale("log")
+plt.legend()
+plt.title(
+    f"Parameter study for different types of agents. {RUNS} runs over {STEPS} steps."
+)
 plt.show()
+
+
+save_file = output_dir.joinpath(f"parameter_study{RUNS}_{STEPS}.png")
+fig.savefig(save_file)

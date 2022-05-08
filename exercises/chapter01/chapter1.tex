@@ -6,7 +6,7 @@ We are considering a tic-tac-toe playing reinforcement learning agent.
 \textit{Suppose, instead of playing against a random opponent, the reinforcement learning algorithm described above played against itself, with both sides learning. What do you think would happen in this case? Would it learn a different policy for selecting moves?}\\
 \begin{itemize}
 \item When self-playing, the reinforcement agent would optimize for states where X wins, while the opponent would optimize for states where O wins.
-\item It is interesting that draws and losses are equally valued here. This means that the agent "won't mind" losing. It only values winning higher than losing and drawing. Of course, in self play this property is symetrically present. m
+\item It is interesting that draws and losses are equally valued here. This means that the agent "won't mind" losing, relative to drawing. It only values winning higher than losing and drawing. Of course, in self play this property is symetrically present.
 \item While it seems intuitive that a sequence of games (given enough learning time) would always converge to a series of draws, given the specified reward function, it seems plausible that we may still see wins on both sides.
 \item Since the opponent keeps changing, it is not certain that the agent will learn an optimal strategy
 \end{itemize}
@@ -14,7 +14,7 @@ We are considering a tic-tac-toe playing reinforcement learning agent.
 \subsection{Symmetries}
 \textit{Many tic-tac-toe positions appear different but are really the same because of symmetries. How might we amend the learning process described above to take advantage of this? In what ways would this change improve the learning process? Now think again. Suppose the opponent did not take advantage of symmetries. In that case, should we? Is it true, then, that symmetrically equivalent positions should necessarily have the same value?}
 \begin{itemize}
-\item we can program the states so that symmetric positions appear identical. For example, we may rotate them to uniquely maximize a certain sum of coefficients. This would speed up the learning process since there is less redundant information to be learned.
+\item We can program the states so that symmetric positions appear identical. For example, we may assign weights to each field on the tic-tac-toe board, where the weights are much larger in the the left and much smaller in bottom left. Then we could maximize a sum of the product of these weights and the X's and O's (suppose we use value 1 for X's and 0.5 for O's). This would speed up the learning process since there is less redundant information to be learned, at the (much lower) cost of computing the rotations.
 \item If the opponent treats symmetrically equivalent positions differently, then our play might take that into account. Then, we do not necessarily need to treat them as equal.
 \end{itemize}
 \subsection{Greedy Play}

@@ -21,7 +21,7 @@ EPSILONS = [2 ** (-x) for x in range(2, 8)]
 ALPHAS = [2 ** (-x) for x in range(-1, 6)]
 CS = [2 ** (-x) for x in range(-2, 5)]
 Q_ZEROS = [2 ** (-x) for x in range(-2, 3)]
-STEPS = 20000  # should be 200k. currently less for debugging purposes
+STEPS = 200000  # should be 200k. currently less for debugging purposes
 RUNS = 10
 
 
