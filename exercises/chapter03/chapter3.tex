@@ -1,0 +1,37 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{ {../../output/} }
+
+
+\begin{document}
+\setcounter{section}{2}
+\section{Finite Markov Decision Processes}
+
+\subsection{Devise three examples of your own that fit the MPD framework, identifying for each its states, actions and rewards. Make the three examples as \textit{different} from each other as possible. The framework is abstract and flexible and can be applied in many different ways. Stretch its limits in some way in at least one of your examples.}
+\textit{text}
+\begin{itemize}
+\item A train driving down a train track. This would obviously have to be tested \textit{very extensively} before releasing it into the wild.
+	\begin{itemize}
+	\item Environment: The current speed of the train, and a map of the upcoming track (including at least upcoming curves and train stations.
+	\item Action: gas or break. 
+	\item Reward: 1 if the train is still running, 0 if not. Can be multiplied by the current speed to encourage speedy driving.
+	\end{itemize}
+\item A robot shooting a bow and arrow at a board. 
+	\begin{itemize}
+	\item Environment: Wind speed and direction. Can be extended with the position if the robot is not in a fixed place.
+	\item  Action: How far to pull back the arrow and where to aim it. 
+	\item Reward: The number of points on the board.
+	\end{itemize}
+\item A machine delivering advertisement content to a website visitor. 
+		\begin{itemize}
+	\item Environment: The current web page and everything that is known about the customer through e.g. customer data or cookies. Could include age, location, previous website visits, etc.
+	\item  Action: The different pieces of content available to the machine. 
+	\item Reward: 1 if the visitor clicks, 0 if not.
+	\end{itemize}
+\end{itemize}
+
+
+\end{document}
