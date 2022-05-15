@@ -33,5 +33,20 @@
 	\end{itemize}
 \end{itemize}
 
+\subsection{}
+\textit{Is the MDP framework adequate to usefully represent all goal-directed learning tasks? Can you think of any clear exceptions?}
+\begin{itemize}
+\item A limitation of the MPD framework is that it needs immediate reward feedback. Tasks where the feedback is delayed would not be adequately represented by this framework. Furthermore, the states need to posess the Markov property, that the state-action pairs only depend on the current state. It is conceivable that they depend on past states as well, though I cannot think of an example where that could not be solved by appending the relevant past states to the current state.
+\item Chess comes to mind, where the reward is either a loss, win or draw at the very end, and evaluating intermediate states is difficult. Or poker, when in addition to the reward being delayed (though only by a few moves), important information is hidden from the agent (the opponent's cards).
+\end{itemize}
+
+\subsection{question}
+\textit{Consider the problem of driving. You could define the actions in terms of the accelerator, steering wheel, and brake, that is, where your body meets the machine. Or you could define them farther out—say, where the rubber meets the road, considering your actions to be tire torques. Or you could define them farther in—say, where your brain meets your body, the actions being muscle twitches to control your limbs. Or you could go to a really high level and say that your actions are your choices of where to drive. What is the right level, the right place to draw the line between agent and environment? On what basis is one location of the line to be preferred over another? Is there any fundamental reason for preferring one location over another, or is it a free choice?}
+\begin{itemize}
+\item I would consider the level of deciding where to drive separate from the other three. The other three are about controlling the vehicle once that decision has been made.\\
+The level where you directly control the tire torques introduces the fewest layers of abstractions between the action and the repsonse. If you define the action as muscle twitches, you go through several systems with possibly unexpected responses before getting feedback in the form of a response. I would think this is more difficult to learn.
+\item However, all seem possible, and defining the problem where your body meets the machine has the advantage that this is how cars are built, so it will be easier to set up a test environment (you don't need a custom car or a brain implant). Furthermore, the number of of possible actions is severely limited in this case (gas, break, steering wheel, if you have an automatic gear shift). This might make the actions easier to learn.
+\item I don't see any reason why you would define the problem in terms of muscle twitches. That seems
+\end{itemize}
 
 \end{document}
